@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    transition: scale 100ms;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    background-color: #ededed;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: x-large;
+}
+
+#calculator {
+    margin-top: 3%;
+    display: flex;
+    flex-direction: column;
+    border: 2px black solid;
+    border-radius: 10px;
+    padding: 30px;
+    gap: 30px;
+    background-color: darkslategray;
+}
+
+#display {
+    height: 150px;
+    width: 445px;
+    border: 2px black solid;
+    border-radius: 5px;
+    box-shadow: inset 2px 2px 10px darkslategray;
+    text-align: right;
+    padding: 15px;
+    background-color: azure;
+    font-size: 50px;
+    resize: none;
+}
+
+#buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.row {
+    display: flex;
+    gap: 15px;
+}
+
+button {
+    font-size:xx-large;
+    border: 2px black solid;
+    border-radius: 5px;
+    height: 80px;
+    width: 100px;
+}
+
+button:hover {
+    scale: 1.04;
+}
+
+.clear {
+    width: 215px;
+    background-color: lightcoral;
+}
+
+.equals {
+    width: 215px;
+    background-color: turquoise;
+}
+
+.operator {
+    background-color: palegoldenrod;
+}
+
+#github {
+    transition: rotate 300ms;
+}
+#github:hover {
+    scale: 1.1;
+    rotate: 360deg;
+    transition: rotate 300ms;
+}
+
+footer {
+    margin-bottom: 10px;
+}
+
+textarea {
+    cursor: default;
+    outline: none;
+}
+textarea::-webkit-scrollbar {
+    width: 10px;
+}
+textarea::-webkit-scrollbar-track {
+    background: #ededed;
+}
+
+textarea::-webkit-scrollbar-thumb {
+    background: #1e3737;
+}
+textarea::-webkit-scrollbar-thumb:hover {
+    background: #0f2323;
+}
