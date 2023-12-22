@@ -1,25 +1,27 @@
-const DIVIDE_BY_ZERO_MESSAGE = 'bruh';
-
 const calculator = {
     expression: '0',
-    // Used to clear the display upon digit or point insertion if a result was being displayed
+    // Flag used to clear the display upon digit or point insertion if a result was being displayed
     displayingResult: false,
+    DIVIDE_BY_ZERO_MESSAGE: 'bruh',
 
     html: document.querySelector('#calculator'),
     display: document.querySelector('#display'),
 
-    '+': (a, b) => a + b,
-    '−': (a, b) => a - b,
-    '×': (a, b) => +((a * b).toFixed(5)),
-    '÷': (a, b) => b == 0? DIVIDE_BY_ZERO_MESSAGE : +((a / b).toFixed(5)),
+    '+'(a, b) { return this.round(a + b) },
+    '−'(a, b) { return this.round(a - b) },
+    '×'(a, b) { return this.round(a * b) },
+    '÷'(a, b) { return b == 0? this.DIVIDE_BY_ZERO_MESSAGE : this.round(a / b) },
+
+    round: num => +(num).toFixed(5),
 
     updateDisplay() { this.display.textContent = this.expression },
 
     calculate(operator) {
+        // part[0]: first operand | part[1]: operator | part[2]: second operand
         const parts = this.expression.split(' ');
         this.expression = '' + this[parts[1]](+parts[0], +parts[2]);
         
-        if (operator && this.expression !== DIVIDE_BY_ZERO_MESSAGE)
+        if (operator && this.expression !== this.DIVIDE_BY_ZERO_MESSAGE)
             this.expression += ` ${operator} `;
     },
 
@@ -28,7 +30,7 @@ const calculator = {
         const expression = this.expression;
     
         if (expression === '0' || expression.endsWith(' 0')) 
-            this.expression = expression.slice(0, expression.length-1) + digit;
+            this.expression = expression.slice(0, -1) + digit;
         else 
             this.expression += digit;
     },
@@ -41,7 +43,7 @@ const calculator = {
         // An operator is set but no second operand
         if (expression.endsWith(' '))
             // Change the operator
-            this.expression = expression.slice(0, expression.length-2) + operator + ' ';
+            this.expression = expression.slice(0, -2) + operator + ' ';
         // Both operator and second operand are set
         else if (expression.includes(' '))
             this.calculate(operator);
@@ -54,14 +56,14 @@ const calculator = {
         const expression = this.expression;
     
         // Last item inserted is an operator or the current number doesn't have a '.' yet
-        if (expression.length === 1 || expression.endsWith(' ') || !expression.split(' ').pop().includes('.'))
+        if (expression.endsWith(' ') || !expression.split(' ').pop().includes('.'))
             this.expression += '.';
     },
 
     equals() {
         const expression = this.expression;
         // Last item inserted is not an operator and two operands have been inserted
-        if (!expression.endsWith(' ') && expression.includes(' ') && expression !== DIVIDE_BY_ZERO_MESSAGE) {
+        if (!expression.endsWith(' ') && expression.includes(' ') && expression !== this.DIVIDE_BY_ZERO_MESSAGE) {
             this.calculate();
             this.displayingResult = true;
         }
@@ -71,14 +73,14 @@ const calculator = {
         const expression = this.expression;
         this.displayingResult = false;
     
-        if (expression === DIVIDE_BY_ZERO_MESSAGE || expression.length === 1)
+        if (expression === this.DIVIDE_BY_ZERO_MESSAGE || expression.length === 1)
             this.clear();
         // Last item inserted is an operator
         else if (expression.endsWith(' '))
-            this.expression = expression.slice(0, expression.length-3);
+            this.expression = expression.slice(0, -3);
         // Last item inserted is a digit
         else
-            this.expression = expression.slice(0, expression.length-1);
+            this.expression = expression.slice(0, -1);
     },
 
     clear() {
@@ -87,9 +89,9 @@ const calculator = {
     },
 
     checkClear() {
-        if (this.displayingResult || this.expression === DIVIDE_BY_ZERO_MESSAGE) 
+        if (this.displayingResult || this.expression === this.DIVIDE_BY_ZERO_MESSAGE) 
             this.clear();
-    }
+    },
 }
 
 
@@ -113,6 +115,26 @@ calculator.html.addEventListener('click', (e) => {
     case 'clear':
         calculator.clear();
     }
+
+    calculator.updateDisplay();
+});
+
+// Keyboard support
+document.addEventListener('keydown', (e) => {
+    const key = e.key;
+
+    if (key >= 0 && key <= 9)
+        calculator.insertDigit(key);
+    else if (['+', '-', '*', '/'].includes(key))
+        calculator.insertOperator(({'+': '+', '-': '−', '*': '×', '/': '÷'})[key]);
+    else if (key === '=' || key === 'Enter')
+        calculator.equals();
+    else if (key === '.')
+        calculator.insertPoint();
+    else if (key === 'Backspace')
+        calculator.backspace();
+    else if (key === 'Escape' || key === 'c')
+        calculator.clear();
 
     calculator.updateDisplay();
 });

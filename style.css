@@ -68,16 +68,16 @@ button:hover {
 
 .clear {
     width: 215px;
-    background-color: lightcoral;
+    background-color: #f08686;
 }
 
 .equals {
     width: 215px;
-    background-color: turquoise;
+    background-color: #64e6dc;
 }
 
 .operator {
-    background-color: palegoldenrod;
+    background-color: #faf096;
 }
 
 #github {
