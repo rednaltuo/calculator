@@ -1,28 +1,33 @@
 const calculator = {
     expression: '0',
+    DIGITS_AFTER_POINT: 5,
+    DIVIDE_BY_ZERO_MESSAGE: 'bruh',
     // Flag used to clear the display upon digit or point insertion if a result was being displayed
     displayingResult: false,
-    DIVIDE_BY_ZERO_MESSAGE: 'bruh',
 
     html: document.querySelector('#calculator'),
     display: document.querySelector('#display'),
 
-    '+'(a, b) { return this.round(a + b) },
-    '−'(a, b) { return this.round(a - b) },
-    '×'(a, b) { return this.round(a * b) },
-    '÷'(a, b) { return b == 0? this.DIVIDE_BY_ZERO_MESSAGE : this.round(a / b) },
-
-    round: num => +(num).toFixed(5),
+    '+': (a, b) => a + b,
+    '−': (a, b) => a - b,
+    '×': (a, b) => a * b,
+    '÷': (a, b) => a / b,
 
     updateDisplay() { this.display.textContent = this.expression },
 
-    calculate(operator) {
-        // part[0]: first operand | part[1]: operator | part[2]: second operand
-        const parts = this.expression.split(' ');
-        this.expression = '' + this[parts[1]](+parts[0], +parts[2]);
-        
-        if (operator && this.expression !== this.DIVIDE_BY_ZERO_MESSAGE)
-            this.expression += ` ${operator} `;
+    calculate(operatorPressed) {
+        const [firstOperand, operator, secondOperand] = this.expression.split(' ');
+        const result = this[operator](+firstOperand, +secondOperand);
+
+        if (result === Infinity) {
+            this.expression = this.DIVIDE_BY_ZERO_MESSAGE;
+            return;
+        }
+
+        this.expression = '' + +result.toFixed(this.DIGITS_AFTER_POINT);
+
+        if (operatorPressed)
+            this.expression += ` ${operatorPressed} `;
     },
 
     insertDigit(digit) {
@@ -63,7 +68,8 @@ const calculator = {
     equals() {
         const expression = this.expression;
         // Last item inserted is not an operator and two operands have been inserted
-        if (!expression.endsWith(' ') && expression.includes(' ') && expression !== this.DIVIDE_BY_ZERO_MESSAGE) {
+        if (!expression.endsWith(' ') && expression.includes(' ') 
+                && expression !== this.DIVIDE_BY_ZERO_MESSAGE) {
             this.calculate();
             this.displayingResult = true;
         }
@@ -123,7 +129,8 @@ calculator.html.addEventListener('click', (e) => {
 document.addEventListener('keydown', (e) => {
     const key = e.key;
 
-    if (key >= 0 && key <= 9)
+    // key === '0' to avoid entering this by pressing the space button (key === ' ')
+    if (key === '0' || key > '0' && key <= '9')
         calculator.insertDigit(key);
     else if (['+', '-', '*', '/'].includes(key))
         calculator.insertOperator(({'+': '+', '-': '−', '*': '×', '/': '÷'})[key]);
