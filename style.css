@@ -20,7 +20,7 @@ body {
 }
 
 #calculator {
-    margin-top: 3%;
+    margin: auto 0;
     display: flex;
     flex-direction: column;
     border: 2px black solid;
@@ -31,11 +31,11 @@ body {
 }
 
 #display {
-    height: 150px;
+    height: 160px;
     width: 445px;
     border: 2px black solid;
     border-radius: 5px;
-    box-shadow: inset 2px 2px 10px darkslategray;
+    box-shadow: inset 3px 3px 10px darkslategray;
     text-align: right;
     padding: 15px;
     background-color: azure;
@@ -103,7 +103,6 @@ textarea::-webkit-scrollbar {
 textarea::-webkit-scrollbar-track {
     background: #ededed;
 }
-
 textarea::-webkit-scrollbar-thumb {
     background: #1e3737;
 }
